@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Project</string>
+    <string name="color_view">List of Colors</string>
 </resources>
