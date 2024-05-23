@@ -13,23 +13,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     Context context;
-    ArrayList <Color> Colors;
-    public RecyclerViewAdapter(Context context, ArrayList<Color> Colors){
-        this.context =context;
-        this.Colors=Colors;
+    ArrayList<Color> Colors;
+
+    public RecyclerViewAdapter(Context context, ArrayList<Color> Colors) {
+        this.context = context;
+        this.Colors = Colors;
     }
+
     @NonNull
     @Override
     public RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view =inflater.inflate(R.layout.recycler_layout, parent, false);
-
-        return new RecyclerViewAdapter.MyViewHolder (view);
+        View view = inflater.inflate(R.layout.recycler_layout, parent, false);
+        return new RecyclerViewAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyViewHolder holder, int position) {
-        holder.textview.setText(Colors.get(position).getName());
+        Color color = Colors.get(position);
+        holder.colorNameTextView.setText(color.getName());
+        holder.colorLocationTextView.setText(color.getLocation());
     }
 
     @Override
@@ -37,12 +40,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return Colors.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView textview;
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView colorNameTextView;
+        TextView colorLocationTextView;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            textview = itemView.findViewById(R.id.color);
+            colorNameTextView = itemView.findViewById(R.id.colorName);
+            colorLocationTextView = itemView.findViewById(R.id.colorLocation);
         }
     }
 }
