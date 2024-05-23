@@ -3,20 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:gravity="center"
     android:padding="10dp">
 
     <TextView
         android:id="@+id/colorName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Color Name"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:text="Color Name" />
 
     <TextView
         android:id="@+id/colorLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Color Location"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:text="Color Location" />
 
 </LinearLayout>
