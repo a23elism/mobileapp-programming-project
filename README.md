@@ -1,42 +1,113 @@
 
 # Rapport
 
-**Skriv din rapport här!**
+Skapat recyclerview (klass och XML) + en recyclerview adapter
+(som kopplar datan till RecyclerView:n) samt en color klass
+för att kunna överföra JSON arrayen med hjälp av Gson som ska nå en API
+med alla färger som skapats i API:n via admingränsnittet
+så att det visas i RecyclerView:n (Både namnet på färg och platsen visas).
+även lagt till knapp som använder sig utav intents för att gå över till
+about sida som innehåller information om målgrupp och generellt om sidan
 
-_Du kan ta bort all text som finns sedan tidigare_.
-
-## Följande grundsyn gäller dugga-svar:
-
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
-
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
-
+Kod:
 ```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
+Main Activity Kod:
+OBS! ENDAST DEN RELEVANTA KODEN VISAS. 
+EJ KOD EMELLAN
+    
+    private final String JSON_URL = "https://mobprog.webug.se/json-api?login=a23elism";
+
+    ArrayList<Color> Colors= new ArrayList<>();
+    Gson gson = new Gson();
+
+    String json = gson.toJson(Colors);
+    
+    
+    protected void onCreate(Bundle savedInstanceState) {
+    
+        goToAboutActivity();
+
+        new JsonTask(this).execute(JSON_URL);
     }
-}
+    
+    @Override
+    public void onPostExecute(String json) {
+        Log.d("MainActivity", json);
+        Type type = new TypeToken<ArrayList<Color>>() {}.getType();
+        ArrayList<Color> Colors = gson.fromJson(json, type);
+
+        RecyclerView RecyclerView = findViewById(R.id.recyclerView);
+
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter (this, Colors);
+        RecyclerView.setAdapter(adapter);
+        RecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.notifyDataSetChanged();
+    }
+
+    private void goToAboutActivity() {
+        Button btn = (Button) findViewById(R.id.about);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 ```
 
-Bilder läggs i samma mapp som markdown-filen.
+```
+RecyclerViewAdapter Kod:
+OBS! endast program koden visas ej XML koden för RecyclerView
+Det blir svårt att minimera koden för RecyclerViewAdapter så hela klassen står med
 
-![](android.png)
+    public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+        Context context;
+        ArrayList<Color> Colors;
+    
+        public RecyclerViewAdapter(Context context, ArrayList<Color> Colors) {
+            this.context = context;
+            this.Colors = Colors;
+        }
+    
+        @NonNull
+        @Override
+        public RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.recycler_layout, parent, false);
+            return new RecyclerViewAdapter.MyViewHolder(view);
+        }
+    
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyViewHolder holder, int position) {
+            Color color = Colors.get(position);
+            holder.colorNameTextView.setText(color.getName());
+            holder.colorLocationTextView.setText(color.getLocation());
+        }
+    
+        @Override
+        public int getItemCount() {
+            return Colors.size();
+        }
+    
+        public static class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView colorNameTextView;
+            TextView colorLocationTextView;
+    
+            public MyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                colorNameTextView = itemView.findViewById(R.id.colorName);
+                colorLocationTextView = itemView.findViewById(R.id.colorLocation);
+            }
+        }
+    }
 
-Läs gärna:
+```
 
-- Boulos, M.N.K., Warren, J., Gong, J. & Yue, P. (2010) Web GIS in practice VIII: HTML5 and the canvas element for interactive online mapping. International journal of health geographics 9, 14. Shin, Y. &
-- Wunsche, B.C. (2013) A smartphone-based golf simulation exercise game for supporting arthritis patients. 2013 28th International Conference of Image and Vision Computing New Zealand (IVCNZ), IEEE, pp. 459–464.
-- Wohlin, C., Runeson, P., Höst, M., Ohlsson, M.C., Regnell, B., Wesslén, A. (2012) Experimentation in Software Engineering, Berlin, Heidelberg: Springer Berlin Heidelberg.
+Bilder:
+
+MainActivity/Home Page (OBS! svårt att visa scroll i en bild)
+![img.png](img.png)
+
+About Page
+![img_1.png](img_1.png)
