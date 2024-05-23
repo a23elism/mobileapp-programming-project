@@ -5,8 +5,9 @@ public class Color {
     private String name;
     private String company;
 
-    public Color(String name){
+    public Color(String name, String location){
         this.name = name;
+        this.location = location;
     }
 
     private String location;
