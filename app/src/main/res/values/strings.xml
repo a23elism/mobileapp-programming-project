@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">Project</string>
+    <string name="welcome">Welcome to Color League!</string>
     <string name="color_view">List of Colors</string>
     <string name="about_button">Go to About</string>
+    <string name="about">What is Color League about?</string>
+    <string name="about_content">
+        Color League is for all workers lost in Color Town
+        trying to find where each color works,
+        whether you are white, blue or orange we have
+        the name of the location you need to be for,
+        this app is more of a quick reminder for those
+        who have bad memory
+    </string>
 </resources>
